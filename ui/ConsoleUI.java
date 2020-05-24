@@ -1,7 +1,6 @@
 package ui;
 
 import java.util.Scanner;
-
 import interfaces.Messageable;
 
 public class ConsoleUI implements Messageable {
