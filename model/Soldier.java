@@ -1,13 +1,12 @@
 package model;
 
-import exceptions.CitizenAgeException;
 import exceptions.CitizenIdException;
 
 public class Soldier extends Citizen {
 	
 	protected boolean carryWeapon;
 	
-	public Soldier(Citizen other) throws CitizenIdException, CitizenAgeException {
+	public Soldier(Citizen other) throws CitizenIdException {
 		super(other);
 		if ((int)(Math.random()*2) == 0)
 			carryWeapon = true;

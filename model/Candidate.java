@@ -1,8 +1,6 @@
 package model;
 
 import java.time.LocalDate;
-
-import exceptions.CitizenAgeException;
 import exceptions.CitizenIdException;
 import model.Citizen;
 
@@ -15,7 +13,7 @@ public class Candidate extends Citizen {
 		this.miflaga = miflaga;
 	}
 	
-	public Candidate(Candidate other) throws CitizenIdException, CitizenAgeException {
+	public Candidate(Candidate other) throws CitizenIdException {
 		super(other);
 		miflaga = other.miflaga;
 	}

@@ -1,8 +1,6 @@
 package manager;
 
 import java.util.Vector;
-
-import exceptions.CitizenAgeException;
 import exceptions.CitizenIdException;
 import interfaces.Sickable;
 import model.Candidate;
@@ -57,7 +55,7 @@ public class ElectionRound {
 		return false;
 	}
 
-	public int changeCitizenToCandidate(String id, String name) throws CitizenIdException, CitizenAgeException {
+	public int changeCitizenToCandidate(String id, String name) throws CitizenIdException {
 		String message = alredyExist(id);
 		if (message.equals("NotExist"))
 			return -1;
@@ -85,7 +83,7 @@ public class ElectionRound {
 		return -3;
 	}
 
-	private void removeCandidateFromMiflaga(String id) throws CitizenIdException, CitizenAgeException {
+	private void removeCandidateFromMiflaga(String id) throws CitizenIdException {
 		int index = voters.getIndexOfObject(new Citizen(null, id, 0));
 		if (index > -1) {
 			if (voters.get(index) instanceof CoronaCandidate) {
@@ -98,7 +96,7 @@ public class ElectionRound {
 		}
 	}
 
-	public int addCitizen(Citizen citizen, String name) throws CitizenIdException, CitizenAgeException {
+	public int addCitizen(Citizen citizen, String name) throws CitizenIdException {
 		if (citizen.getAge() <= 21) {
 			if (citizen instanceof CoronaCitizen) {
 				CoronaCitizen d = (CoronaCitizen) citizen;
@@ -151,7 +149,7 @@ public class ElectionRound {
 		c.setKalfi(kalfi.get(index));
 	}
 
-	public boolean addMiflaga(String name, int standpoint) throws CitizenIdException, CitizenAgeException {
+	public boolean addMiflaga(String name, int standpoint) throws CitizenIdException {
 		for (int i = 0; i < miflagot.size(); i++) {
 			if (miflagot.get(i).getName().equalsIgnoreCase(name))
 				return false;
@@ -236,7 +234,7 @@ public class ElectionRound {
 		return print;
 	}
 
-	public String electionResult() {
+	public String electionResult()  {
 		String print = "The Results of the elections on the date, " + month + "/" + year + " are:\n";
 		for (int i = 0; i < miflagot.size(); i++) {
 			print += "\n" + miflagot.get(i).getName() + ":\n";

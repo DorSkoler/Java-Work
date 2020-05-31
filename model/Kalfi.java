@@ -6,7 +6,7 @@ import interfaces.Sickable;
 
 public class Kalfi<T> {
 
-	private enum KalfiType {Regular, Corona, Soldier, CoronaSoldier};
+	public enum KalfiType {Regular, Corona, Soldier, CoronaSoldier};
 
 	public static int counter;
 	private int numOfKalfi;
@@ -87,8 +87,10 @@ public class Kalfi<T> {
 		voters.add(citizen);
 	}
 
-	public int numVotesToMiflaga(int id) {
-		return numVotesEachMiflaga.get(id);
+	public int numVotesToMiflaga(int index) {
+		if (index < 0 || index > numVotesEachMiflaga.size())
+			return 0;
+		return numVotesEachMiflaga.get(index);
 	}
 
 	public boolean equals(Object obj) {

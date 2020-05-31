@@ -1,7 +1,6 @@
 package model;
 
 import java.util.Random;
-import exceptions.CitizenAgeException;
 import exceptions.CitizenIdException;
 import interfaces.Sickable;
 
@@ -10,14 +9,14 @@ public class CoronaCitizen extends Citizen implements Sickable {
 	protected int days;
 	protected boolean suit;
 
-	public CoronaCitizen(Citizen other, int days2) throws CitizenIdException, CitizenAgeException {
+	public CoronaCitizen(Citizen other, int days2) throws CitizenIdException {
 		super(other);
 		days = days2;
 		Random r = new Random();
 		suit = r.nextBoolean();
 	}
 	
-	public CoronaCitizen(CoronaCitizen other) throws CitizenIdException, CitizenAgeException {
+	public CoronaCitizen(CoronaCitizen other) throws CitizenIdException {
 		super(other);
 		days = other.days;
 		suit = other.suit;

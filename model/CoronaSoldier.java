@@ -1,8 +1,6 @@
 package model;
 
 import java.util.Random;
-
-import exceptions.CitizenAgeException;
 import exceptions.CitizenIdException;
 
 public class CoronaSoldier extends Soldier {
@@ -16,7 +14,7 @@ public class CoronaSoldier extends Soldier {
 		suit = other.suit;
 	}
 
-	public CoronaSoldier(Citizen other,int days2) throws CitizenIdException, CitizenAgeException {
+	public CoronaSoldier(Citizen other,int days2) throws CitizenIdException {
 		super(other);
 		days = days2;
 		Random r = new Random();

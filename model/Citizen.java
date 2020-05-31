@@ -1,8 +1,6 @@
 package model;
 
 import java.time.LocalDate;
-
-import exceptions.CitizenAgeException;
 import exceptions.CitizenIdException;
 
 public class Citizen {
@@ -12,15 +10,13 @@ public class Citizen {
 	protected int yearOfBirth;
 	protected Kalfi <?> kalfi;
 
-	public Citizen(String name, String id, int yearOfBirth) throws CitizenIdException, CitizenAgeException, NumberFormatException {
+	public Citizen(String name, String id, int yearOfBirth) throws CitizenIdException, NumberFormatException {
 		this.name = name;
 		setId(id);
 		setYearOfBirth(yearOfBirth);
 	}
 	
-	private void setYearOfBirth(int yearOfBirth2) throws CitizenAgeException {
-		if (LocalDate.now().getYear() - yearOfBirth2 < 18)
-			throw new CitizenAgeException();
+	private void setYearOfBirth(int yearOfBirth2) {
 		yearOfBirth = yearOfBirth2;
 	}
 
@@ -38,7 +34,7 @@ public class Citizen {
 		this.kalfi = kalfi;
 	}
 	
-	public Citizen(Citizen other) throws CitizenIdException, CitizenAgeException {
+	public Citizen(Citizen other) throws CitizenIdException {
 		this(other.name, other.id, other.yearOfBirth);
 		kalfi = other.kalfi;
 	}

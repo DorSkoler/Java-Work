@@ -2,8 +2,6 @@ package model;
 
 import java.time.LocalDate;
 import java.util.Vector;
-
-import exceptions.CitizenAgeException;
 import exceptions.CitizenIdException;
 
 public class Miflaga implements Comparable<Miflaga> {
@@ -25,7 +23,7 @@ public class Miflaga implements Comparable<Miflaga> {
 		candidates = new Vector<Citizen>();
 	}
 
-	public Miflaga(Miflaga other) throws CitizenIdException, CitizenAgeException {
+	public Miflaga(Miflaga other) throws CitizenIdException {
 		name = other.name;
 		standPoint = other.standPoint;
 		dateOfCreation = LocalDate.of(other.dateOfCreation.getYear(), other.dateOfCreation.getMonth(),
@@ -61,7 +59,7 @@ public class Miflaga implements Comparable<Miflaga> {
 		}
 	}
 
-	public void removeCandidate(String id) throws NumberFormatException, CitizenIdException, CitizenAgeException {
+	public void removeCandidate(String id) throws NumberFormatException, CitizenIdException {
 		candidates.remove(new Citizen(null, id, 0));
 	}
 

@@ -1,8 +1,6 @@
 package model;
 
 import java.time.LocalDate;
-
-import exceptions.CitizenAgeException;
 import exceptions.CitizenIdException;
 import interfaces.Sickable;
 
@@ -11,13 +9,13 @@ public class CoronaCandidate extends Candidate implements Sickable {
 	private int days;
 	private boolean suit;
 
-	public CoronaCandidate(CoronaCandidate other) throws CitizenIdException, CitizenAgeException {
+	public CoronaCandidate(CoronaCandidate other) throws CitizenIdException {
 		super(other);
 		days = other.days;
 		suit = other.suit;
 	}
 	
-	public CoronaCandidate(CoronaCitizen c, Miflaga miflaga) throws CitizenIdException, CitizenAgeException {
+	public CoronaCandidate(CoronaCitizen c, Miflaga miflaga) throws CitizenIdException {
 		super(c, miflaga);
 		days = c.days;
 		suit = c.suit;
