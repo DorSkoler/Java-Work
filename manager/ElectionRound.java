@@ -211,6 +211,10 @@ public class ElectionRound {
 		}
 		return str;
 	}
+	
+	public Vector<Miflaga> getMiflagot(){
+		return miflagot;
+	}
 
 	private String alredyExist(String id) {
 		for (int i = 0; i < voters.size(); i++) {

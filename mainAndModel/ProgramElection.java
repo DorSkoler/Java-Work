@@ -1,27 +1,32 @@
-package mainModel;
+package mainAndModel;
 
 import java.util.Vector;
 
-import javax.swing.JOptionPane;
-
 import controller.Controller;
 import exceptions.CitizenIdException;
-import exceptions.MismatchCharTypeException;
-import exceptions.SelectionIntegerRangeException;
 import interfaces.ElectionListenable;
 import interfaces.Messageable;
+import javafx.application.Application;
 import javafx.stage.Stage;
 import manager.ElectionRound;
 import model.Citizen;
 import model.CoronaCitizen;
+import model.Miflaga;
 import ui.GraphicalUI;
+import views.AddCandidateView;
 import views.AddCitizenView;
 import views.AddKalfiView;
+import views.AddMiflagaView;
+import views.MainView;
 
-public class ProgramElection {
-	Vector<ElectionListenable> allElectionListenables;
-	ElectionRound round = new ElectionRound(01, 2020);
-	Messageable ui;
+public class ProgramElection extends Application {
+	private Vector<ElectionListenable> allElectionListenables;
+	private ElectionRound round = new ElectionRound(01, 2020);
+	private Messageable ui;
+
+	public static void main(String[] args) {
+		launch(args);
+	}
 
 	public ProgramElection() {
 		allElectionListenables = new Vector<ElectionListenable>();
@@ -56,36 +61,57 @@ public class ProgramElection {
 		return false;
 	}
 
-	private void makeCandidate() throws CitizenIdException {
-		String miflaga = ui.getString("Name of miflaga?");
-		int k = round.addCitizen(, miflaga);
+	public boolean addCandidate(String name, String id, int yearOfBirth, int days, String miflaga) {
+		if (!addCitizen(name, id, yearOfBirth, days))
+			return false;
+		int k = 0;
+		try {
+			k = round.changeCitizenToCandidate(id, miflaga);
+		} catch (CitizenIdException e) {
+			ui.showMessage(e.getMessage());
+		}
 		if (k == 1)
 			ui.showMessage("Added successfully");
-		if (k == 2)
+		if (k == 2) {
 			ui.showMessage("Not added, alredy exist citizen with this id");
-		if (k == 3)
+			System.out.println("23");
+			return false;
+		}
+		if (k == 3) {
 			ui.showMessage("Not added, there's no such miflaga");
+			return false;
+		}
+		return true;
 	}
 
-	private void makeCandidateAlredyExist(String id) throws CitizenIdException {
-		String miflaga = ui.getString("Name of miflaga?");
-		int k = round.changeCitizenToCandidate(id, miflaga);
+	public boolean makeCandidateAlredyExist(String id, String miflaga) {
+		int k = 1;
+		try {
+			k = round.changeCitizenToCandidate(id, miflaga);
+		} catch (CitizenIdException e) {
+			ui.showMessage(e.getMessage());
+		}
 		if (k == 0) {
 			ui.showMessage("Added successfully");
-			return;
+			return false;
 		}
 		if (k == -1) {
 			ui.showMessage("Not added, there's no such citizen");
-			return;
+			return false;
 		}
 		if (k == -2) {
 			ui.showMessage("Soldier can not be a Candidate");
-			return;
+			return false;
 		}
 		if (k == -3) {
 			ui.showMessage("Not added, there's no such miflaga");
-			return;
+			return false;
 		}
+		return true;
+	}
+
+	public Vector<Miflaga> allMiflagot() {
+		return round.getMiflagot();
 	}
 
 	private void addHardCoded() {
@@ -146,46 +172,40 @@ public class ProgramElection {
 		return false;
 	}
 
+	public boolean addMiflaga(String name, int standPoint) {
+		try {
+			if (round.addMiflaga(name, standPoint)) {
+				ui.showMessage("Added successfully");
+				return true;
+			}
+		} catch (CitizenIdException e) {
+			ui.showMessage(e.getMessage());
+		}
+		ui.showMessage("Not added, alredy exist miflaga with that name");
+		return false;
+	}
+
 	public void electionMenu(int choice) {
-		boolean done;
 		switch (choice) {
+		case 0:
+			MainView view = new MainView(new Stage());
+			Controller c0 = new Controller(view, this);
+			break;
 		case 1:
 			AddKalfiView view1 = new AddKalfiView(new Stage());
-			ElectionListenable c1 = new Controller(view1, this);
+			Controller c1 = new Controller(view1, this);
 			break;
 		case 2:
 			AddCitizenView view2 = new AddCitizenView(new Stage());
-			ElectionListenable c2 = new Controller(view2, this);
+			Controller c2 = new Controller(view2, this);
 			break;
 		case 3:
-			done = false;
-			while (!done) {
-				try {
-					if (round.addMiflaga(ui.getString("Enter your miflaga details:\nname"),
-							ui.getInteger("stand point:\n1-right\n2-left\n3-center")))
-						ui.showMessage("Added successfully");
-					else
-						ui.showMessage("Not added, alredy exist miflaga with that name");
-					done = true;
-				} catch (CitizenIdException e) {
-					ui.showMessage(e.getMessage()); // not expecting exception
-				}
-			}
+			AddMiflagaView view3 = new AddMiflagaView(new Stage());
+			Controller c3 = new Controller(view3, this);
 			break;
 		case 4:
-			done = false;
-			while (!done) {
-				String answer = ui.getString("Candidate alredy exist as citizen?\nIf Yes enter id\nIf not enter 'N'");
-				try {
-					if (answer.equalsIgnoreCase("n"))
-						makeCandidate();
-					else
-						makeCandidateAlredyExist(answer);
-					done = true;
-				} catch (CitizenIdException e) {
-					ui.showMessage(e.getMessage());
-				}
-			}
+			AddCandidateView view4 = new AddCandidateView(new Stage());
+			Controller c4 = new Controller(view4, this);
 			break;
 		case 5:
 			ui.showMessage("These are the kalfis:\n" + round.printKalfis());
@@ -214,5 +234,11 @@ public class ProgramElection {
 			ui.showMessage("See you in a few months");
 			break;
 		}
+
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		electionMenu(0);
 	}
 }

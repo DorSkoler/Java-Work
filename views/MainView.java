@@ -42,54 +42,63 @@ public class MainView implements ElectionViewable {
 			@Override
 			public void handle(ActionEvent arg0) {
 				allListenables.get(0).viewChoose(1);
+				primaryStage.close();
 			}
 		});
 		allButtons.get(1).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				allListenables.get(0).viewChoose(2);
+				primaryStage.close();
 			}
 		});
 		allButtons.get(2).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				allListenables.get(0).viewChoose(3);
+				primaryStage.close();
 			}
 		});
 		allButtons.get(3).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				allListenables.get(0).viewChoose(4);
+				primaryStage.close();
 			}
 		});
 		allButtons.get(4).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				allListenables.get(0).viewChoose(5);
+				primaryStage.close();
 			}
 		});
 		allButtons.get(5).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				allListenables.get(0).viewChoose(6);
+				primaryStage.close();
 			}
 		});
 		allButtons.get(6).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				allListenables.get(0).viewChoose(7);
+				primaryStage.close();
 			}
 		});
 		allButtons.get(7).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				allListenables.get(0).viewChoose(8);
+				primaryStage.close();
 			}
 		});
 		allButtons.get(8).setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				allListenables.get(0).viewChoose(9);
+				primaryStage.close();
 			}
 		});
 		allButtons.get(9).setOnAction(new EventHandler<ActionEvent>() {
@@ -100,11 +109,11 @@ public class MainView implements ElectionViewable {
 			}
 		});
 
-		
 		gpMainGridPane.setHgap(7);
 		gpMainGridPane.setVgap(7);
 		gpMainGridPane.setPadding(new Insets(7));
-		Scene scene = new Scene(gpMainGridPane, 350, 300);
+		gpMainGridPane.setAlignment(Pos.CENTER);
+		Scene scene = new Scene(gpMainGridPane, 400, 350);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 

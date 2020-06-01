@@ -6,7 +6,7 @@ import exceptions.CitizenIdException;
 
 public class Miflaga implements Comparable<Miflaga> {
 
-	private enum StandPoint {
+	public enum StandPoint {
 		right, left, center
 	};
 

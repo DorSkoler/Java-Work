@@ -7,6 +7,7 @@ import interfaces.ElectionViewable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -52,8 +53,10 @@ public class AddKalfiView implements ElectionViewable {
 					errorLabel.setVisible(true);
 					return;
 				}
-				if (allListenables.get(0).viewAddedKalfi(getIntegerType(), addressField.getText()))
+				if (allListenables.get(0).viewAddedKalfi(getIntegerType(), addressField.getText())) {
+					allListenables.get(0).viewChoose(0);
 					primaryStage.close();
+				}
 			}
 		});
 		exitButton.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
@@ -69,7 +72,8 @@ public class AddKalfiView implements ElectionViewable {
 		gpMainGridPane.setVgap(7);
 		gpMainGridPane.setHgap(7);
 		gpMainGridPane.setPadding(new Insets(7));
-		Scene scene = new Scene(gpMainGridPane, 400, 200);
+		gpMainGridPane.setAlignment(Pos.CENTER);
+		Scene scene = new Scene(gpMainGridPane, 450, 250);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}

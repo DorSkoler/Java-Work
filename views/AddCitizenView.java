@@ -8,6 +8,7 @@ import interfaces.ElectionViewable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -82,22 +83,26 @@ public class AddCitizenView implements ElectionViewable {
 					errorLabel.setVisible(true);
 					return;
 				}
-				if(isInBidud && daysField.getText().isEmpty()) {
+				if (isInBidud && daysField.getText().isEmpty()) {
 					errorLabel.setText("Please enter days");
 					errorLabel.setVisible(true);
 					return;
 				}
 				try {
-				if (isInBidud) {
-					if (allListenables.get(0).viewAddedCitizen(nameField.getText(), idField.getText(), ageBox.getValue().intValue(), Integer.parseInt(daysField.getText())))
-						primaryStage.close();	
-				}
-				else {
-					if (allListenables.get(0).viewAddedCitizen(nameField.getText(), idField.getText(), ageBox.getValue().intValue(), 0))
-						primaryStage.close();
-				}
-				}
-				catch (NumberFormatException e) {
+					if (isInBidud) {
+						if (allListenables.get(0).viewAddedCitizen(nameField.getText(), idField.getText(),
+								ageBox.getValue().intValue(), Integer.parseInt(daysField.getText()))) {
+							allListenables.get(0).viewChoose(0);
+							primaryStage.close();
+						}
+					} else {
+						if (allListenables.get(0).viewAddedCitizen(nameField.getText(), idField.getText(),
+								ageBox.getValue().intValue(), 0)) {
+							allListenables.get(0).viewChoose(0);
+							primaryStage.close();
+						}
+					}
+				} catch (NumberFormatException e) {
 					errorLabel.setText("Please enter only numbers in days");
 					errorLabel.setVisible(true);
 					return;
@@ -105,7 +110,7 @@ public class AddCitizenView implements ElectionViewable {
 			}
 		});
 		for (int i = 0; i < 100; i++) {
-			ageBox.getItems().add(LocalDate.now().getYear()- 18 - i);
+			ageBox.getItems().add(LocalDate.now().getYear() - 18 - i);
 		}
 		nameLabel.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
 		idLabel.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
@@ -135,6 +140,7 @@ public class AddCitizenView implements ElectionViewable {
 		gpMainGridPane.add(daysField, 2, 4);
 		gpMainGridPane.add(exitButton, 2, 5);
 		gpMainGridPane.add(errorLabel, 2, 6);
+		gpMainGridPane.setAlignment(Pos.CENTER);
 		Scene scene = new Scene(gpMainGridPane, 450, 250);
 		primaryStage.setScene(scene);
 		primaryStage.show();
