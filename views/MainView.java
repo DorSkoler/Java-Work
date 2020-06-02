@@ -16,16 +16,19 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import manager.ElectionRound;
+import model.Citizen;
+import model.Miflaga;
 
 public class MainView implements ElectionViewable {
 	private Vector<ElectionUiListenable> allListenables;
 	private Vector<Button> allButtons;
-
+	
 	public MainView(Stage primaryStage) {
 		allListenables = new Vector<ElectionUiListenable>();
 		allButtons = new Vector<Button>();
 		addButtons();
-		primaryStage.setTitle("Main Options");
+		primaryStage.setTitle("Main Menu");
+		allButtons.get(8).setDisable(true);
 		GridPane gpMainGridPane = new GridPane();
 		gpMainGridPane.add(allButtons.get(0), 0, 0);
 		gpMainGridPane.add(allButtons.get(1), 0, 1);
@@ -91,7 +94,7 @@ public class MainView implements ElectionViewable {
 			@Override
 			public void handle(ActionEvent arg0) {
 				allListenables.get(0).viewChoose(8);
-				primaryStage.close();
+				allButtons.get(8).setDisable(false);
 			}
 		});
 		allButtons.get(8).setOnAction(new EventHandler<ActionEvent>() {
@@ -115,8 +118,6 @@ public class MainView implements ElectionViewable {
 		gpMainGridPane.setAlignment(Pos.CENTER);
 		Scene scene = new Scene(gpMainGridPane, 400, 350);
 		primaryStage.setScene(scene);
-		primaryStage.show();
-
 	}
 
 	@Override
@@ -141,4 +142,10 @@ public class MainView implements ElectionViewable {
 			allButtons.get(i).setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
 		}
 	}
+
+	@Override
+	public void updateMiflagot(Miflaga miflaga) {
+		return;
+	}
+
 }

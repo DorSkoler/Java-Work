@@ -12,19 +12,25 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import model.Citizen;
 import model.Miflaga;
 
 public class AddMiflagaView implements ElectionViewable {
 	private Vector<ElectionUiListenable> allListenables;
-	private Button exitButton = new Button("submit");
+	private Button submitButton = new Button("submit");
 	private Label nameLabel = new Label("Name:");
 	private Label standPointLabel = new Label("Stand point:");
 	private TextField nameField = new TextField();
 	private ComboBox<Miflaga.StandPoint> standPointBox;
 	private Label errorLabel = new Label();
+	private VBox vBox = new VBox();
+	private ToolBar toolBar = new ToolBar();
+	private Button exitButton = new Button("Back To Main Menu");
 
 	public AddMiflagaView(Stage primaryStage) {
 		primaryStage.setTitle("Add Miflaga");
@@ -34,7 +40,7 @@ public class AddMiflagaView implements ElectionViewable {
 		errorLabel.setTextFill(Color.RED);
 		errorLabel.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
 		errorLabel.setVisible(false);
-		exitButton.setOnAction(new EventHandler<ActionEvent>() {
+		submitButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				if (nameField.getText().isEmpty()) {
@@ -51,18 +57,30 @@ public class AddMiflagaView implements ElectionViewable {
 					if (Miflaga.StandPoint.values()[i].equals(standPointBox.getValue()))
 						if (allListenables.get(0).viewAddedMiflaga(nameField.getText(), i + 1)) {
 							allListenables.get(0).viewChoose(0);
+							nameField.clear();
+							standPointBox.getSelectionModel().clearSelection();
+							errorLabel.setVisible(false);
 							primaryStage.close();
 						}
 				}
 			}
 		});
+		exitButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				nameField.clear();
+				standPointBox.getSelectionModel().clearSelection();
+				errorLabel.setVisible(false);
+				allListenables.get(0).viewChoose(0);
+				primaryStage.close();
+			}
+			
+		});
 		for (int i = 0; i < 3; i++) {
 			standPointBox.getItems().add(Miflaga.StandPoint.values()[i]);
 		}
-		nameLabel.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		nameField.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		standPointLabel.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		standPointBox.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
+		vBox.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
+		exitButton.setStyle("-fx-font: 12px \"MS Reference Sans Serif\"");
 		gpMainGridPane.setHgap(7);
 		gpMainGridPane.setVgap(7);
 		gpMainGridPane.setPadding(new Insets(10));
@@ -70,18 +88,25 @@ public class AddMiflagaView implements ElectionViewable {
 		gpMainGridPane.add(nameField, 2, 0);
 		gpMainGridPane.add(standPointLabel, 0, 1);
 		gpMainGridPane.add(standPointBox, 2, 1);
-		gpMainGridPane.add(exitButton, 2, 3);
+		gpMainGridPane.add(submitButton, 2, 3);
 		gpMainGridPane.add(errorLabel, 2, 4);
 		gpMainGridPane.setAlignment(Pos.CENTER);
-		Scene scene = new Scene(gpMainGridPane, 450, 250);
+		vBox.getChildren().add(toolBar);
+		toolBar.getItems().add(exitButton);
+		vBox.getChildren().add(gpMainGridPane);
+		Scene scene = new Scene(vBox, 450, 250);
 		primaryStage.setScene(scene);
-		primaryStage.show();
 	}
 
 	@Override
 	public void registerListener(ElectionUiListenable l) {
 		allListenables.add(l);
 
+	}
+
+	@Override
+	public void updateMiflagot(Miflaga miflaga) {
+		return;
 	}
 
 }

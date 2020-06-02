@@ -73,7 +73,7 @@ public class Miflaga implements Comparable<Miflaga> {
 	}
 
 	public String toString() {
-		String print = name + " was created in: " + dateOfCreation + " , stand point: " + standPoint.toString()
+		String print = name + " was created in: " + dateOfCreation + "\nStand point: " + standPoint.toString()
 				+ "\nCandidates are:\n";
 		for (int i = 0; i < candidates.size(); i++) {
 			print += (i + 1) + ". " + candidates.get(i).getName() + "\n";

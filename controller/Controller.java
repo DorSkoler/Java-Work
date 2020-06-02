@@ -6,16 +6,13 @@ import interfaces.ElectionListenable;
 import interfaces.ElectionUiListenable;
 import interfaces.ElectionViewable;
 import mainAndModel.ProgramElection;
+import model.Citizen;
 import model.Miflaga;
 
 public class Controller implements ElectionListenable, ElectionUiListenable {
 
 	private ProgramElection theModElection;
 	private ElectionViewable theView;
-
-	public Controller() {
-		
-	}
 	
 	public Controller(ElectionViewable view, ProgramElection election) {
 		theModElection = election;
@@ -57,6 +54,31 @@ public class Controller implements ElectionListenable, ElectionUiListenable {
 	@Override
 	public Vector<Miflaga> viewAsksMiflagot() {
 		return theModElection.allMiflagot();
+	}
+
+	@Override
+	public void modelUpdatedMiflagot(Miflaga miflaga) {
+		theView.updateMiflagot(miflaga);
+	}
+
+	@Override
+	public String viewAsksForAllCitizens() {
+		return theModElection.showAllCitizen();
+	}
+
+	@Override
+	public String viewAsksForAllKalfis() {
+		return theModElection.showAllKalfis();
+	}
+
+	@Override
+	public String viewAsksForAllMiflagot() {
+		return theModElection.showAllMiflagot();
+	}
+
+	@Override
+	public String viewAsksForResults() {
+		return theModElection.showResults();
 	}
 
 }

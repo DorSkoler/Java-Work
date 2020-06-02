@@ -14,14 +14,20 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import model.Citizen;
+import model.Miflaga;
 
 public class AddCitizenView implements ElectionViewable {
 
 	private Vector<ElectionUiListenable> allListenables;
-	private Button exitButton = new Button("submit");
+	private Button submitButton = new Button("submit");
 	private Label nameLabel = new Label("Name:");
 	private Label idLabel = new Label("ID:");
 	private Label dateLabel = new Label("Year of birth:");
@@ -30,14 +36,19 @@ public class AddCitizenView implements ElectionViewable {
 	private TextField nameField = new TextField();
 	private TextField idField = new TextField();
 	private ComboBox<Integer> ageBox;
-	private Button bidud1Button = new Button("YES");
-	private Button bidud2Button = new Button("NO");
+	private ToggleButton bidud1Button = new ToggleButton("YES");
+	private ToggleButton bidud2Button = new ToggleButton("NO");
 	private TextField daysField = new TextField();
 	private Label errorLabel = new Label();
 	private boolean isInBidud;
+	private ToolBar toolBar = new ToolBar();
+	private Button exitButton = new Button("Back To Main Menu");
+	private VBox vBox = new VBox();
 
 	public AddCitizenView(Stage primaryStage) {
 		primaryStage.setTitle("Add Citizen");
+		exitButton.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
+		toolBar.getItems().add(exitButton);
 		allListenables = new Vector<ElectionUiListenable>();
 		ageBox = new ComboBox<Integer>();
 		GridPane gpMainGridPane = new GridPane();
@@ -46,12 +57,15 @@ public class AddCitizenView implements ElectionViewable {
 		errorLabel.setVisible(false);
 		daysField.setVisible(false);
 		daysLabel.setVisible(false);
-		exitButton.setVisible(false);
+		submitButton.setVisible(false);
+		ToggleGroup group = new ToggleGroup();
+		bidud1Button.setToggleGroup(group);
+		bidud2Button.setToggleGroup(group);
 		bidud1Button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				isInBidud = true;
-				exitButton.setVisible(true);
+				submitButton.setVisible(true);
 				daysField.setVisible(true);
 				daysLabel.setVisible(true);
 			}
@@ -60,12 +74,12 @@ public class AddCitizenView implements ElectionViewable {
 			@Override
 			public void handle(ActionEvent event) {
 				isInBidud = false;
-				exitButton.setVisible(true);
+				submitButton.setVisible(true);
 				daysField.setVisible(false);
 				daysLabel.setVisible(false);
 			}
 		});
-		exitButton.setOnAction(new EventHandler<ActionEvent>() {
+		submitButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				if (nameField.getText().isEmpty()) {
@@ -93,12 +107,14 @@ public class AddCitizenView implements ElectionViewable {
 						if (allListenables.get(0).viewAddedCitizen(nameField.getText(), idField.getText(),
 								ageBox.getValue().intValue(), Integer.parseInt(daysField.getText()))) {
 							allListenables.get(0).viewChoose(0);
+							clearView();
 							primaryStage.close();
 						}
 					} else {
 						if (allListenables.get(0).viewAddedCitizen(nameField.getText(), idField.getText(),
 								ageBox.getValue().intValue(), 0)) {
 							allListenables.get(0).viewChoose(0);
+							clearView();
 							primaryStage.close();
 						}
 					}
@@ -109,21 +125,23 @@ public class AddCitizenView implements ElectionViewable {
 				}
 			}
 		});
+		exitButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				clearView();
+				errorLabel.setVisible(false);
+				group.selectToggle(null);
+				allListenables.get(0).viewChoose(0);
+				primaryStage.close();
+			}
+			
+		});
 		for (int i = 0; i < 100; i++) {
 			ageBox.getItems().add(LocalDate.now().getYear() - 18 - i);
 		}
-		nameLabel.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		idLabel.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		dateLabel.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		ageBox.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		bidudLabel.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		bidud1Button.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		bidud2Button.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		daysLabel.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		exitButton.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		nameField.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		idField.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		daysField.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
+		vBox.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
+		exitButton.setStyle("-fx-font: 12px \"MS Reference Sans Serif\"");
 		gpMainGridPane.setHgap(7);
 		gpMainGridPane.setVgap(7);
 		gpMainGridPane.setPadding(new Insets(10));
@@ -138,16 +156,35 @@ public class AddCitizenView implements ElectionViewable {
 		gpMainGridPane.add(bidud2Button, 2, 3);
 		gpMainGridPane.add(daysLabel, 0, 4);
 		gpMainGridPane.add(daysField, 2, 4);
-		gpMainGridPane.add(exitButton, 2, 5);
+		gpMainGridPane.add(submitButton, 2, 5);
 		gpMainGridPane.add(errorLabel, 2, 6);
+		vBox.getChildren().add(toolBar);
+		vBox.getChildren().add(gpMainGridPane);
 		gpMainGridPane.setAlignment(Pos.CENTER);
-		Scene scene = new Scene(gpMainGridPane, 450, 250);
+		vBox.setSpacing(7);
+		Scene scene = new Scene(vBox, 450, 300);
 		primaryStage.setScene(scene);
-		primaryStage.show();
 	}
 
 	@Override
 	public void registerListener(ElectionUiListenable l) {
 		allListenables.add(l);
 	}
+	
+	private void clearView() {
+		nameField.clear();
+		idField.clear();
+		ageBox.getSelectionModel().clearSelection();
+		daysField.clear();
+		daysField.setVisible(false);
+		daysLabel.setVisible(false);
+		submitButton.setVisible(false);
+		errorLabel.setVisible(false);
+	}
+
+	@Override
+	public void updateMiflagot(Miflaga miflaga) {
+		return;
+	}
+
 }

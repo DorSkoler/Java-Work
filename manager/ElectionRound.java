@@ -192,7 +192,7 @@ public class ElectionRound {
 		for (int i = 0; i < kalfi.size(); i++) {
 			print += kalfi.get(i).toString() + "\n\n";
 		}
-		return print;
+		return print + "__________________________________________________________\n\n";
 	}
 
 	public String printKalfis() {
@@ -207,7 +207,7 @@ public class ElectionRound {
 	public String printMiflagot() {
 		String str = "";
 		for (int i = 0; i < miflagot.size(); i++) {
-			str += "\n" + miflagot.get(i).toString();
+			str += "\n" + miflagot.get(i).toString() + "__________________________________________________\n";
 		}
 		return str;
 	}
@@ -239,13 +239,14 @@ public class ElectionRound {
 	}
 
 	public String electionResult()  {
-		String print = "The Results of the elections on the date, " + month + "/" + year + " are:\n";
+		String print = "The Results of the elections on the date, " + month + "/" + year + " are:\n__________________________________________________________";
 		for (int i = 0; i < miflagot.size(); i++) {
 			print += "\n" + miflagot.get(i).getName() + ":\n";
 			print += electionResultHelper(regularKalfis, i) + electionResultHelper(coronaKalfis, i)
-					+ electionResultHelper(soldierKalfis, i) + electionResultHelper(coronaSoldierKalfis, i);
+					+ electionResultHelper(soldierKalfis, i) + electionResultHelper(coronaSoldierKalfis, i) + "__________________________________________________________\n";
 		}
 		miflagot.sort(null);
+		print += "Summary of elections:\n";
 		for (int i = 0; i < miflagot.size(); i++) {
 			print += "\n" + miflagot.get(i).getName() + ": sum of votes - " + miflagot.get(i).getNumOfVotes() + "\n";
 		}

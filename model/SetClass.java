@@ -58,7 +58,7 @@ public class SetClass <T> {
 			return "\n";
 		String print = "";
 		for (int i = 0; i <= topIndex; i++) {
-			print += arr[i].toString() + "\n\n";
+			print += arr[i].toString() + "\n_________________________________________________________\n\n";
 		}
 		return print;
 	}

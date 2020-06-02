@@ -11,6 +11,10 @@ public interface ElectionUiListenable {
 	boolean viewAddedMiflaga(String name, int standPoint);
 	boolean viewAddedCandidate(String name, String id, int yearOfBirth,int days, String miflaga);
 	boolean viewAddedCandidateAlreadyExist(String id, String miflaga);
+	String viewAsksForAllCitizens();
+	String viewAsksForAllKalfis();
+	String viewAsksForAllMiflagot();
+	String viewAsksForResults();
 	Vector<Miflaga> viewAsksMiflagot();
 	
 }

@@ -13,20 +13,27 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import model.Citizen;
 import model.Kalfi;
+import model.Miflaga;
 
 public class AddKalfiView implements ElectionViewable {
 
 	private Vector<ElectionUiListenable> allListenables;
-	private Button exitButton = new Button("submit");
+	private Button submitButton = new Button("submit");
 	private ComboBox<String> kalfisBox;
 	private TextField addressField = new TextField();
 	private Label errorLabel = new Label();
 	private Label typeLabel = new Label("Type of Kalfi:");
 	private Label addressLabel = new Label("Address:");
+	private VBox vBox = new VBox();
+	private ToolBar toolBar = new ToolBar();
+	private Button exitButton = new Button("Back To Main Menu");
 	
 	public AddKalfiView(Stage primaryStage) {
 		primaryStage.setTitle("Add Kalfi");
@@ -40,7 +47,7 @@ public class AddKalfiView implements ElectionViewable {
 		errorLabel.setTextFill(Color.RED);
 		errorLabel.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
 		errorLabel.setVisible(false);
-		exitButton.setOnAction(new EventHandler<ActionEvent>() {	
+		submitButton.setOnAction(new EventHandler<ActionEvent>() {	
 			@Override
 			public void handle(ActionEvent arg0) {
 				if (kalfisBox.getValue() == null) {
@@ -55,27 +62,41 @@ public class AddKalfiView implements ElectionViewable {
 				}
 				if (allListenables.get(0).viewAddedKalfi(getIntegerType(), addressField.getText())) {
 					allListenables.get(0).viewChoose(0);
+					errorLabel.setVisible(false);
+					addressField.clear();
+					kalfisBox.getSelectionModel().clearSelection();
 					primaryStage.close();
 				}
 			}
 		});
-		exitButton.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		addressLabel.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		typeLabel.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		kalfisBox.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
+		exitButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				addressField.clear();
+				kalfisBox.getSelectionModel().clearSelection();
+				errorLabel.setVisible(false);
+				allListenables.get(0).viewChoose(0);
+				primaryStage.close();
+			}
+			
+		});
+		vBox.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
+		exitButton.setStyle("-fx-font: 12px \"MS Reference Sans Serif\"");
 		kalfisBox.setPromptText("Type");
 		gpMainGridPane.add(kalfisBox, 1, 0);
 		gpMainGridPane.add(typeLabel, 0, 0);
 		gpMainGridPane.add(addressLabel, 0, 1);
 		gpMainGridPane.add(addressField, 1, 1);
-		gpMainGridPane.add(exitButton, 1, 2);
+		gpMainGridPane.add(submitButton, 1, 2);
 		gpMainGridPane.setVgap(7);
 		gpMainGridPane.setHgap(7);
 		gpMainGridPane.setPadding(new Insets(7));
 		gpMainGridPane.setAlignment(Pos.CENTER);
-		Scene scene = new Scene(gpMainGridPane, 450, 250);
+		vBox.getChildren().add(toolBar);
+		toolBar.getItems().add(exitButton);
+		vBox.getChildren().add(gpMainGridPane);
+		Scene scene = new Scene(vBox, 450, 250);
 		primaryStage.setScene(scene);
-		primaryStage.show();
 	}
 
 	private int getIntegerType() {
@@ -92,5 +113,11 @@ public class AddKalfiView implements ElectionViewable {
 	public void registerListener(ElectionUiListenable l) {
 		allListenables.add(l);	
 	}
+
+	@Override
+	public void updateMiflagot(Miflaga miflaga) {
+		return;
+	}
+
 	
 }
