@@ -1,12 +1,11 @@
 package controller;
 
+import java.time.LocalDate;
 import java.util.Vector;
-
 import interfaces.ElectionListenable;
 import interfaces.ElectionUiListenable;
 import interfaces.ElectionViewable;
 import mainAndModel.ProgramElection;
-import model.Citizen;
 import model.Miflaga;
 
 public class Controller implements ElectionListenable, ElectionUiListenable {
@@ -37,8 +36,8 @@ public class Controller implements ElectionListenable, ElectionUiListenable {
 	}
 
 	@Override
-	public boolean viewAddedMiflaga(String name, int standPoint) {
-		return theModElection.addMiflaga(name, standPoint);
+	public boolean viewAddedMiflaga(String name, int standPoint, LocalDate dateOfCreation) {
+		return theModElection.addMiflaga(name, standPoint, dateOfCreation);
 	}
 
 	@Override
@@ -79,6 +78,11 @@ public class Controller implements ElectionListenable, ElectionUiListenable {
 	@Override
 	public String viewAsksForResults() {
 		return theModElection.showResults();
+	}
+
+	@Override
+	public void viewSetElectionDate(int month, int year) {
+		theModElection.setElectionDate(month, year);
 	}
 
 }

@@ -1,9 +1,7 @@
 package views;
 
-
 import java.util.Vector;
 import interfaces.ElectionUiListenable;
-import interfaces.ElectionViewable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -18,11 +16,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import model.Citizen;
 import model.Kalfi;
-import model.Miflaga;
 
-public class AddKalfiView implements ElectionViewable {
+public class AddKalfiView extends AbstractView {
 
 	private Vector<ElectionUiListenable> allListenables;
 	private Button submitButton = new Button("submit");
@@ -31,14 +27,13 @@ public class AddKalfiView implements ElectionViewable {
 	private Label errorLabel = new Label();
 	private Label typeLabel = new Label("Type of Kalfi:");
 	private Label addressLabel = new Label("Address:");
-	private VBox vBox = new VBox();
-	private ToolBar toolBar = new ToolBar();
-	private Button exitButton = new Button("Back To Main Menu");
 	
-	public AddKalfiView(Stage primaryStage) {
+	public AddKalfiView(ElectionUiListenable l) {
+		super();
 		primaryStage.setTitle("Add Kalfi");
 		kalfisBox = new ComboBox<String>();
 		allListenables = new Vector<ElectionUiListenable>();
+		allListenables.add(l);
 		GridPane gpMainGridPane = new GridPane();
 		for (int i = 0; i < Kalfi.KalfiType.values().length; i++) {
 			kalfisBox.getItems().add(Kalfi.KalfiType.values()[i].toString());
@@ -80,8 +75,6 @@ public class AddKalfiView implements ElectionViewable {
 			}
 			
 		});
-		vBox.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
-		exitButton.setStyle("-fx-font: 12px \"MS Reference Sans Serif\"");
 		kalfisBox.setPromptText("Type");
 		gpMainGridPane.add(kalfisBox, 1, 0);
 		gpMainGridPane.add(typeLabel, 0, 0);
@@ -92,11 +85,7 @@ public class AddKalfiView implements ElectionViewable {
 		gpMainGridPane.setHgap(7);
 		gpMainGridPane.setPadding(new Insets(7));
 		gpMainGridPane.setAlignment(Pos.CENTER);
-		vBox.getChildren().add(toolBar);
-		toolBar.getItems().add(exitButton);
 		vBox.getChildren().add(gpMainGridPane);
-		Scene scene = new Scene(vBox, 450, 250);
-		primaryStage.setScene(scene);
 	}
 
 	private int getIntegerType() {
@@ -108,16 +97,9 @@ public class AddKalfiView implements ElectionViewable {
 			return 3;
 		return 4;
 	}
-	
-	@Override
-	public void registerListener(ElectionUiListenable l) {
-		allListenables.add(l);	
-	}
 
-	@Override
-	public void updateMiflagot(Miflaga miflaga) {
-		return;
+	public void showMe() {
+		primaryStage.show();
 	}
-
 	
 }

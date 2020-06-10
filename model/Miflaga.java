@@ -7,7 +7,7 @@ import exceptions.CitizenIdException;
 public class Miflaga implements Comparable<Miflaga> {
 
 	public enum StandPoint {
-		right, left, center
+		Right, Left, Center
 	};
 
 	private String name;
@@ -16,10 +16,10 @@ public class Miflaga implements Comparable<Miflaga> {
 	private Vector<Citizen> candidates;
 	private int numOfVotes;
 
-	public Miflaga(String name, int standPoint) {
+	public Miflaga(String name, int standPoint, LocalDate dateOfCreation) {
 		this.name = name;
 		this.standPoint = StandPoint.values()[standPoint - 1]; // main input are 1,2,3
-		this.dateOfCreation = LocalDate.now();
+		this.dateOfCreation = dateOfCreation;
 		candidates = new Vector<Citizen>();
 	}
 

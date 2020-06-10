@@ -1,5 +1,6 @@
 package manager;
 
+import java.time.LocalDate;
 import java.util.Vector;
 import exceptions.CitizenIdException;
 import interfaces.Sickable;
@@ -24,16 +25,24 @@ public class ElectionRound {
 	private Vector<Kalfi<Soldier>> soldierKalfis;
 	private Vector<Kalfi<CoronaSoldier>> coronaSoldierKalfis;
 
-	public ElectionRound(int month, int year) {
+	public ElectionRound() {
 		voters = new SetClass<Citizen>();
 		miflagot = new Vector<Miflaga>();
 		regularKalfis = new Vector<Kalfi<Citizen>>();
 		coronaKalfis = new Vector<Kalfi<Sickable>>();
 		soldierKalfis = new Vector<Kalfi<Soldier>>();
 		coronaSoldierKalfis = new Vector<Kalfi<CoronaSoldier>>();
+	}
+
+	public void setMonth(int month) {
 		this.month = month;
+	}
+
+
+	public void setYear(int year) {
 		this.year = year;
 	}
+
 
 	public boolean addKalfi(String adress, int selection) {
 		if (selection == 1) {
@@ -149,12 +158,12 @@ public class ElectionRound {
 		c.setKalfi(kalfi.get(index));
 	}
 
-	public boolean addMiflaga(String name, int standpoint) throws CitizenIdException {
+	public boolean addMiflaga(String name, int standpoint, LocalDate dateOfCreation) throws CitizenIdException {
 		for (int i = 0; i < miflagot.size(); i++) {
 			if (miflagot.get(i).getName().equalsIgnoreCase(name))
 				return false;
 		}
-		miflagot.add(new Miflaga(name, standpoint));
+		miflagot.add(new Miflaga(name, standpoint, dateOfCreation));
 		return true;
 	}
 

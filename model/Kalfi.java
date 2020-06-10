@@ -88,9 +88,12 @@ public class Kalfi<T> {
 	}
 
 	public int numVotesToMiflaga(int index) {
-		if (index < 0 || index > numVotesEachMiflaga.size())
-			return 0;
+		try {
 		return numVotesEachMiflaga.get(index);
+		}
+		catch (ArrayIndexOutOfBoundsException e) {
+			return 0;
+		}
 	}
 
 	public boolean equals(Object obj) {

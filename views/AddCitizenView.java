@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.Vector;
 
 import interfaces.ElectionUiListenable;
-import interfaces.ElectionViewable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -21,10 +20,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import model.Citizen;
-import model.Miflaga;
 
-public class AddCitizenView implements ElectionViewable {
+public class AddCitizenView {
 
 	private Vector<ElectionUiListenable> allListenables;
 	private Button submitButton = new Button("submit");
@@ -44,12 +41,15 @@ public class AddCitizenView implements ElectionViewable {
 	private ToolBar toolBar = new ToolBar();
 	private Button exitButton = new Button("Back To Main Menu");
 	private VBox vBox = new VBox();
+	private Stage primaryStage;
 
-	public AddCitizenView(Stage primaryStage) {
+	public AddCitizenView(ElectionUiListenable l) {
+		primaryStage = new Stage();
 		primaryStage.setTitle("Add Citizen");
 		exitButton.setStyle("-fx-font: 14px \"MS Reference Sans Serif\"");
 		toolBar.getItems().add(exitButton);
 		allListenables = new Vector<ElectionUiListenable>();
+		allListenables.add(l);
 		ageBox = new ComboBox<Integer>();
 		GridPane gpMainGridPane = new GridPane();
 		errorLabel.setTextFill(Color.RED);
@@ -112,7 +112,7 @@ public class AddCitizenView implements ElectionViewable {
 						}
 					} else {
 						if (allListenables.get(0).viewAddedCitizen(nameField.getText(), idField.getText(),
-								ageBox.getValue().intValue(), 0)) {
+								ageBox.getValue().intValue(), -1)) {
 							allListenables.get(0).viewChoose(0);
 							clearView();
 							primaryStage.close();
@@ -165,11 +165,6 @@ public class AddCitizenView implements ElectionViewable {
 		Scene scene = new Scene(vBox, 450, 300);
 		primaryStage.setScene(scene);
 	}
-
-	@Override
-	public void registerListener(ElectionUiListenable l) {
-		allListenables.add(l);
-	}
 	
 	private void clearView() {
 		nameField.clear();
@@ -182,9 +177,9 @@ public class AddCitizenView implements ElectionViewable {
 		errorLabel.setVisible(false);
 	}
 
-	@Override
-	public void updateMiflagot(Miflaga miflaga) {
-		return;
+	
+	public void showMe() {
+		primaryStage.show();
 	}
 
 }

@@ -1,5 +1,6 @@
 package mainAndModel;
 
+import java.time.LocalDate;
 import java.util.Vector;
 import controller.Controller;
 import exceptions.CitizenIdException;
@@ -12,33 +13,13 @@ import model.Citizen;
 import model.CoronaCitizen;
 import model.Miflaga;
 import ui.GraphicalUI;
-import views.AddCandidateView;
-import views.AddCitizenView;
-import views.AddKalfiView;
-import views.AddMiflagaView;
 import views.MainView;
-import views.ShowAllCitizensView;
-import views.ShowAllKalfisView;
-import views.ShowResultsView;
-import views.ShowAllMiflagotView;
 
 public class ProgramElection extends Application {
 	private Vector<ElectionListenable> allElectionListenables;
-	private ElectionRound round = new ElectionRound(01, 2020);
 	private Messageable ui;
-	private Stage s0;
-	private Stage s1;
-	private Stage s2;
-	private Stage s3;
-	private Stage s4;
-	private Stage s5;
-	private Stage s6;
-	private Stage s7;
-	private Stage s9;
-	private ShowAllKalfisView view5;
-	private ShowAllCitizensView view6;
-	private ShowAllMiflagotView view7;
-	private ShowResultsView view9;
+	private ElectionRound round;
+	private MainView mainView;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -46,39 +27,11 @@ public class ProgramElection extends Application {
 
 	public ProgramElection() {
 		allElectionListenables = new Vector<ElectionListenable>();
-		viewOpen();
 		ui = new GraphicalUI();
+		round = new ElectionRound();
+		mainView = new MainView();
+		new Controller(mainView, this);
 		addHardCoded();
-	}
-	
-	private void viewOpen() {
-		s0 = new Stage();
-		s1 = new Stage();
-		s2 = new Stage();
-		s3 = new Stage();
-		s4 = new Stage();
-		s5 = new Stage();
-		s6 = new Stage();
-		s7 = new Stage();
-		s9 = new Stage();
-		MainView view = new MainView(s0);
-		Controller c0 = new Controller(view, this);
-		AddKalfiView view1 = new AddKalfiView(s1);
-		Controller c1 = new Controller(view1, this);
-		AddCitizenView view2 = new AddCitizenView(s2);
-		Controller c2 = new Controller(view2, this);
-		AddMiflagaView view3 = new AddMiflagaView(s3);
-		Controller c3 = new Controller(view3, this);
-		AddCandidateView view4 = new AddCandidateView(s4);
-		Controller c4 = new Controller(view4, this);
-		view5 = new ShowAllKalfisView(s5);
-		Controller c5 = new Controller(view5, this);
-		view6 = new ShowAllCitizensView(s6);
-		Controller c6 = new Controller(view6, this);
-		view7 = new ShowAllMiflagotView(s7);
-		Controller c7 = new Controller(view7, this);
-		view9 = new ShowResultsView(s9);
-		Controller c9 = new Controller(view9, this);
 	}
 
 	public void addListener(ElectionListenable l) {
@@ -88,25 +41,30 @@ public class ProgramElection extends Application {
 	public String showAllCitizen() {
 		return round.printCitizen();
 	}
-	
+
+	public void setElectionDate(int month, int year) {
+		round.setMonth(month);
+		round.setYear(year);
+	}
+
 	public String showAllKalfis() {
 		return round.printKalfis();
 	}
-	
+
 	public String showAllMiflagot() {
 		return round.printMiflagot();
 	}
-	
+
 	public String showResults() {
 		return round.electionResult();
 	}
-	
+
 	public boolean addCitizen(String name, String id, int yearOfBirth, int days) {
 		int result = 0;
 		Citizen tempCitizen;
 		try {
 			tempCitizen = new Citizen(name, id, yearOfBirth);
-			if (days != 0)
+			if (days < -1)
 				tempCitizen = new CoronaCitizen(tempCitizen, days);
 			result = round.addCitizen(tempCitizen, null);
 		} catch (CitizenIdException e) {
@@ -114,6 +72,7 @@ public class ProgramElection extends Application {
 			return false;
 		} catch (Exception e) {
 			ui.showMessage(e.getMessage());
+			return false;
 		}
 		if (result == 1) {
 			ui.showMessage("Added successfully");
@@ -137,7 +96,6 @@ public class ProgramElection extends Application {
 			ui.showMessage("Added successfully");
 		if (k == 2) {
 			ui.showMessage("Not added, alredy exist citizen with this id");
-			System.out.println("23");
 			return false;
 		}
 		if (k == 3) {
@@ -178,9 +136,9 @@ public class ProgramElection extends Application {
 
 	private void addHardCoded() {
 		try {
-			round.addMiflaga("KacholLavan", 1);
-			round.addMiflaga("Likud", 2);
-			round.addMiflaga("HaaretzShelanu", 3);
+			round.addMiflaga("KacholLavan", 1, LocalDate.of(1973, 12, 13));
+			round.addMiflaga("Likud", 2, LocalDate.of(2019, 2, 21));
+			round.addMiflaga("HaaretzShelanu", 3, LocalDate.of(2005, 7, 5));
 			round.addKalfi("Halevi 2, Jerusalem", 1);
 			round.addKalfi("Jualin 18, Raanana", 2);
 			round.addKalfi("Segev 20, Tel Aviv", 3);
@@ -197,33 +155,9 @@ public class ProgramElection extends Application {
 			round.addCitizen(new Citizen("Erez", "987654322", 1958), "HaaretzShelanu");
 			round.addCitizen(new Citizen("Israel", "987654323", 1960), "HaaretzShelanu");
 			for (ElectionListenable l : allElectionListenables) {
-				l.modelUpdatedMiflagot(new Miflaga("Likud", 2));
-				l.modelUpdatedMiflagot(new Miflaga("KacholLavan", 1));
-				l.modelUpdatedMiflagot(new Miflaga("HaaretzShelanu", 3));
-			}
-			for (int i = 0; i < 1000; i++) {
-				String str = "208942342";
-				int d = Integer.parseInt(str) + i;
-				str = Integer.toString(d);
-				round.addCitizen(new Citizen("Dor", str, 1990), null);
-			}
-			for (int i = 0; i < 1000; i++) {
-				String str = "208954542";
-				int d = Integer.parseInt(str) + i;
-				str = Integer.toString(d);
-				round.addCitizen(new Citizen("Dor", str, 2000), null);
-			}
-			for (int i = 0; i < 1000; i++) {
-				String str = "208965652";
-				int d = Integer.parseInt(str) + i;
-				str = Integer.toString(d);
-				round.addCitizen(new CoronaCitizen(new Citizen("Dor", str, 1990), 3), null);
-			}
-			for (int i = 0; i < 1000; i++) {
-				String str = "208977762";
-				int d = Integer.parseInt(str) + i;
-				str = Integer.toString(d);
-				round.addCitizen(new CoronaCitizen(new Citizen("Dor", str, 2000), 3), null);
+				l.modelUpdatedMiflagot(new Miflaga("Likud", 2, LocalDate.of(1973, 12, 13)));
+				l.modelUpdatedMiflagot(new Miflaga("KacholLavan", 1, LocalDate.of(2019, 2, 21)));
+				l.modelUpdatedMiflagot(new Miflaga("HaaretzShelanu", 3, LocalDate.of(2005, 7, 5)));
 			}
 		} catch (CitizenIdException e) {
 			System.out.println("error hard coded");
@@ -239,12 +173,12 @@ public class ProgramElection extends Application {
 		return false;
 	}
 
-	public boolean addMiflaga(String name, int standPoint) {
+	public boolean addMiflaga(String name, int standPoint, LocalDate dateOfCreation) {
 		try {
-			if (round.addMiflaga(name, standPoint)) {
+			if (round.addMiflaga(name, standPoint, dateOfCreation)) {
 				ui.showMessage("Added successfully");
-				for (ElectionListenable l : allElectionListenables) 
-					l.modelUpdatedMiflagot(new Miflaga(name, standPoint));
+				for (ElectionListenable l : allElectionListenables)
+					l.modelUpdatedMiflagot(new Miflaga(name, standPoint, dateOfCreation));
 				return true;
 			}
 		} catch (CitizenIdException e) {
@@ -257,42 +191,14 @@ public class ProgramElection extends Application {
 	public void electionMenu(int choice) {
 		switch (choice) {
 		case 0:
-			s0.show();
+			mainView.showMe();
 			break;
 		case 1:
-			s1.show();
-			break;
-		case 2:
-			s2.show();
-			break;
-		case 3:
-			s3.show();
-			break;
-		case 4:
-			s4.show();
-			break;
-		case 5:
-			view5.setKalfis();
-			s5.show();
-			break;
-		case 6:
-			view6.setCitizens();
-			s6.show();
-			break;
-		case 7:
-			view7.setMiflagot();
-			s7.show();
-			break;
-		case 8:
 			round.doPrimaries();
 			round.doElection();
 			ui.showMessage("Election done!");
 			break;
-		case 9:
-			view9.updateChart();
-			s9.show();
-			break;
-		case 10:
+		case 2:
 			ui.showMessage("See you in a few months");
 			break;
 		}

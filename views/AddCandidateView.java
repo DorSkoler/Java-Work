@@ -3,7 +3,6 @@ package views;
 import java.time.LocalDate;
 import java.util.Vector;
 import interfaces.ElectionUiListenable;
-import interfaces.ElectionViewable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -20,10 +19,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import model.Citizen;
 import model.Miflaga;
 
-public class AddCandidateView implements ElectionViewable {
+public class AddCandidateView {
+	
 	private Vector<ElectionUiListenable> allListenables;
 	private Button submitButton = new Button("submit");
 	private Label existCitizenLabel = new Label("Citizen already exist?");
@@ -48,9 +47,12 @@ public class AddCandidateView implements ElectionViewable {
 	private ToolBar toolBar = new ToolBar();
 	private Button exitButton = new Button("Back To Main Menu");
 	private VBox vBox = new VBox();
+	private Stage primaryStage;
 	
-	public AddCandidateView(Stage primaryStage) {
+	public AddCandidateView(ElectionUiListenable l) {
+		primaryStage = new Stage();
 		allListenables = new Vector<ElectionUiListenable>();
+		allListenables.add(l);
 		primaryStage.setTitle("Add Candidate");
 		ageBox = new ComboBox<Integer>();
 		miflagaBox = new ComboBox<String>();
@@ -188,13 +190,17 @@ public class AddCandidateView implements ElectionViewable {
 									miflagaBox.getValue())) {
 								allListenables.get(0).viewChoose(0);
 								clearView();
+								group.selectToggle(null);
+								group1.selectToggle(null);
 								primaryStage.close();
 							}
 						} else {
 							if (allListenables.get(0).viewAddedCandidate(nameField.getText(), idField.getText(),
-									ageBox.getValue().intValue(), 0, miflagaBox.getValue())) {
+									ageBox.getValue().intValue(), -1, miflagaBox.getValue())) {
 								allListenables.get(0).viewChoose(0);
 								clearView();
+								group.selectToggle(null);
+								group1.selectToggle(null);
 								primaryStage.close();
 							}
 						}
@@ -213,13 +219,6 @@ public class AddCandidateView implements ElectionViewable {
 			@Override
 			public void handle(ActionEvent event) {
 				clearView();
-				bidudLabel.setVisible(false);
-				bidud1Button.setVisible(false);
-				bidud2Button.setVisible(false);
-				dateLabel.setVisible(false);
-				ageBox.setVisible(false);
-				nameLabel.setVisible(false);
-				nameField.setVisible(false);
 				allListenables.get(0).viewChoose(0);
 				group.selectToggle(null);
 				group1.selectToggle(null);
@@ -257,14 +256,6 @@ public class AddCandidateView implements ElectionViewable {
 		Scene scene = new Scene(vBox, 500, 350);
 		primaryStage.setScene(scene);
 	}
-
-	@Override
-	public void registerListener(ElectionUiListenable l) {
-		allListenables.add(l);
-//		for (int i = 0; i < l.viewAsksMiflagot().size(); i++) {
-//			miflagaBox.getItems().add(l.viewAsksMiflagot().get(i).getName());
-//		}
-	}
 	
 	private void clearView() {
 		nameField.clear();
@@ -280,11 +271,22 @@ public class AddCandidateView implements ElectionViewable {
 		miflagaLabel.setVisible(false);
 		miflagaBox.setVisible(false);
 		errorLabel.setVisible(false);
+		submitButton.setVisible(false);
+		dateLabel.setVisible(false);
+		ageBox.setVisible(false);
+		bidudLabel.setVisible(false);
+		bidud1Button.setVisible(false);
+		bidud2Button.setVisible(false);
+		nameLabel.setVisible(false);
+		nameField.setVisible(false);	
 	}
 
-	@Override
 	public void updateMiflagot(Miflaga miflaga) {
 		miflagaBox.getItems().add(miflaga.getName());
+	}
+
+	public void showMe() {
+		primaryStage.show();
 	}
 
 }
